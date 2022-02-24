@@ -50,7 +50,13 @@ export const epics = combineEpics<StoreAction, StoreAction, StoreState>(
       mergeMap(() => {
         if (state$.value.config.editOnFav) {
           const word = state$.value.searchHistory[state$.value.historyIndex]
-
+          state$.value.renderedDicts.forEach((d, idx) => {
+            if (d.id === 'bing') {
+              word.note = JSON.stringify(
+                state$.value.renderedDicts[idx].searchResult['cdef']
+              )
+            }
+          })
           if (isPopupPage() || isStandalonePage()) {
             const { width: screenWidth, height: screenHeight } = window.screen
             const width = Math.round(Math.min(Math.max(screenWidth, 440), 640))
