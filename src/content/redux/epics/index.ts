@@ -52,9 +52,13 @@ export const epics = combineEpics<StoreAction, StoreAction, StoreState>(
           const word = state$.value.searchHistory[state$.value.historyIndex]
           state$.value.renderedDicts.forEach((d, idx) => {
             if (d.id === 'bing') {
-              word.note = JSON.stringify(
-                state$.value.renderedDicts[idx].searchResult['cdef']
-              )
+              const val = state$.value.renderedDicts[idx].searchResult['cdef']
+              let note: string = ''
+              val.forEach((item: { [x: string]: string }) => {
+                note +=
+                  '<b>' + item['pos'] + '</b>' + ': ' + item['def'] + '<br>'
+              })
+              word.note = note
             }
           })
           if (isPopupPage() || isStandalonePage()) {
